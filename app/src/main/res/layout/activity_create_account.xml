@@ -2,42 +2,95 @@
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/main_header_selector"
+>
 
     <EditText
             android:id="@+id/et_first_name"
-            style="@style/viewCustom"
             android:ems="10"
             android:hint="@string/first_name"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:backgroundTint="@color/colorWhite"
+            android:layout_marginTop="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+    />
     <EditText
             android:id="@+id/et_last_name"
-            style="@style/viewCustom"
-            android:layout_below="@id/et_first_name"
             android:ems="10"
             android:hint="@string/last_name"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:backgroundTint="@color/colorWhite"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/et_first_name"
+    />
     <EditText
             android:id="@+id/et_email"
-            style="@style/viewCustom"
             android:ems="10"
             android:layout_below="@id/et_last_name"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:backgroundTint="@color/colorWhite"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+    />
     <EditText
             android:id="@+id/et_password"
-            style="@style/viewCustom"
             android:layout_below="@id/et_email"
             android:ems="10"
             android:hint="@string/password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:backgroundTint="@color/colorWhite"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+    />
     <Button
             android:id="@+id/btn_register"
             style="@style/viewCustom"
-            android:layout_below="@id/et_password"
-            android:background="@color/colorAccent"
             android:text="@string/create_act"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="120dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentBottom="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/transparent_btn"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:layout_marginBottom="25dp"
+    />
 
 </RelativeLayout>
