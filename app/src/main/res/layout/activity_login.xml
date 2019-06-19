@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/main_header_selector"
+>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/et_email"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:backgroundTint="@color/colorWhite"
+            android:layout_marginTop="100dp"
+            android:hint="@string/email"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+    />
+
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/et_password"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:backgroundTint="@color/colorWhite"
+            android:hint="@string/password"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/et_email"/>
+    <Button
+            android:text="@string/login_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_login"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/transparent_btn"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/et_password"/>
+    <TextView
+            android:text="Forgot Password?"
+            android:textColor="@color/colorWhite"
+            android:clickable="true"
+            android:id="@+id/tv_forgot_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/btn_login"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center"
+    />
+    <Button
+            android:text="@string/create_act"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_register_account"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="120dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="120dp"
+            android:layout_marginTop="120dp"
+            android:layout_alignParentBottom="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/transparent_btn"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+
+            android:layout_marginBottom="25dp"/>
+
+</RelativeLayout>

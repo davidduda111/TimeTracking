@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "823937364225",
+    "firebase_url": "https://vamz-1811.firebaseio.com",
+    "project_id": "vamz-1811",
+    "storage_bucket": "vamz-1811.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823937364225:android:aa91cc075ef4885e",
+        "android_client_info": {
+          "package_name": "com.example.semestralka_vamz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823937364225-vsaaju6964l7pfn1cqfhql310hhth203.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS4GyaQSmTnLLW7pqTratNv5aFUDOIdL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823937364225-vsaaju6964l7pfn1cqfhql310hhth203.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "823937364225-dj2dt1rn15b6kmuqiueguup7eau2b4l4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.company.vamz",
+                "app_store_id": "1811"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

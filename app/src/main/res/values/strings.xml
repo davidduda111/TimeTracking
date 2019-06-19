@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Time tracking</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="login_title">Login</string>
+    <string name="create_act">Create Account</string>
+    <string name="send_password_reset_email">Send password reset mail</string>
+    <string name="account_photo">Account photo</string>
+    <string name="logout">Logout</string>
+    <string name="settings">Settings</string>
+    <string name="statistics">Statistics</string>
+    <string name="salary">Salary</string>
+    <string name="perHour">/h</string>
+    <string name="currency">Currency</string>
+
+    <string name="loading">Loading...</string>
+    <string name="defaultTime">00:00:00</string>
+</resources>
