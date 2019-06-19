@@ -103,6 +103,7 @@ class CreateAccountActivity : AppCompatActivity() {
         val intent = Intent(this@CreateAccountActivity, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
+        finish()
     }
 
     private fun verifyEmail() {

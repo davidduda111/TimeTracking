@@ -12,9 +12,6 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.PopupMenu
 import java.util.concurrent.TimeUnit
-import android.support.v4.os.HandlerCompat.postDelayed
-
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initialise()
-        initTimer()
+        initCount()
     }
 
     private fun initialise() {
@@ -107,11 +104,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initTimer() {
+    private fun initCount() {
         if(sharedPreferences.getBoolean(KEY_RUNNING, false)) {
             start_btn.setImageResource(R.drawable.ic_stop_white_100dp)
             startTimer()
-
         }
     }
 
@@ -142,6 +138,7 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
 
                 updateTimer()
+                updateSalary()
 
                 handler.postDelayed(this, delay.toLong())
             }
@@ -154,6 +151,28 @@ class MainActivity : AppCompatActivity() {
             val timeString = hmsTimeFormatter(timeElapsed)
 
             time.text = timeString
+        }
+    }
+
+    private fun updateSalary() {
+        if (sharedPreferences.getBoolean(KEY_RUNNING, false)) {
+            val mUser = mAuth!!.currentUser
+            val mUserReference = mDatabaseReference!!.child(mUser!!.uid)
+
+            mUserReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    val timeElapsed = System.currentTimeMillis() - sharedPreferences.getLong(KEY_START, System.currentTimeMillis())
+                    var salary = snapshot.child("salary").value as String
+                    val salaryPerMillisecond = (salary.replace(",", ".").toDouble() / (60*60*1000))
+                    val currency = snapshot.child("currency").value as String
+
+                    val finalString = (Math.round((salaryPerMillisecond * timeElapsed) * 100.0) / 100.0).toString()+currency
+
+                    salaryText.text = finalString
+                }
+                override fun onCancelled(databaseError: DatabaseError) {}
+            })
         }
     }
 }
