@@ -11,7 +11,7 @@ import kotlin.NullPointerException as NullPointerException1
 class WelcomeActivity : AppCompatActivity() {
 
     private var r = Random()
-    private val random_time = r.nextInt(4000 - 1500) + 1000
+    private val random_time = r.nextInt(1500 - 1000) + 1000
     private val SPLASH_TIME_OUT = random_time
 
     override fun onCreate(savedInstanceState: Bundle?) {

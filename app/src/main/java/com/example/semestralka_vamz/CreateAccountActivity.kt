@@ -82,6 +82,8 @@ class CreateAccountActivity : AppCompatActivity() {
                         val currentUserDb = mDatabaseReference!!.child(userId)
                         currentUserDb.child("firstName").setValue(firstName)
                         currentUserDb.child("lastName").setValue(lastName)
+                        currentUserDb.child("salary").setValue(0)
+                        currentUserDb.child("currency").setValue("€")
                         updateUserInfoAndUI()
                     } else {
                         // If sign in fails, display a message to the user.

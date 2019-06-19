@@ -201,7 +201,7 @@
                 android:layout_height="45dp"
                 android:inputType="textEmailAddress"
                 android:ems="10"
-                android:id="@+id/login"
+                android:id="@+id/email"
                 android:textColor="@color/colorWhite"
                 android:backgroundTint="@color/colorWhite"
                 android:layout_marginTop="10dp"

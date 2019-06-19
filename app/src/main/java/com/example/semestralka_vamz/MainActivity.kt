@@ -61,6 +61,10 @@ class MainActivity : AppCompatActivity() {
                 //Logout
                 if(item.itemId == R.id.logout_btn) {
                     mAuth?.signOut()
+                    editor.putBoolean(KEY_RUNNING, false)
+                    editor.putLong(KEY_START, 0)
+                    editor.apply()
+                    
                     startActivity(
                         Intent(this@MainActivity,
                             LoginActivity::class.java)
@@ -68,7 +72,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if(item.itemId == R.id.settings) {
-                    mAuth?.signOut()
                     startActivity(
                         Intent(this@MainActivity,
                             SettingsActivity::class.java)
@@ -76,7 +79,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if(item.itemId == R.id.statistics) {
-                    mAuth?.signOut()
                     startActivity(
                         Intent(this@MainActivity,
                             StatisticsActivity::class.java)
