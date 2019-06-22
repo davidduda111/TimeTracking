@@ -1,8 +1,6 @@
 package com.example.semestralka_vamz
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
@@ -11,19 +9,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.PopupMenu
-import java.util.concurrent.TimeUnit
+import com.example.semestralka_vamz.models.User
+import com.example.semestralka_vamz.tasks.TrackTime
 
 
 class MainActivity : AppCompatActivity() {
+    //Time tracking
+    private lateinit var timeTracking: TrackTime
 
-    //SharedPreferences
-    private val PREF_NAME = "data"
-    private val KEY_START = "start"
-    private val KEY_RUNNING = "running"
-
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
-
+    //User
+    private lateinit var user: User
 
     //Firebase references
     private var mDatabaseReference: DatabaseReference? = null
@@ -35,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initialise()
-        initCount()
+
     }
 
     private fun initialise() {
@@ -43,9 +38,21 @@ class MainActivity : AppCompatActivity() {
         mDatabaseReference = mDatabase!!.reference.child("Users")
         mAuth = FirebaseAuth.getInstance()
 
-        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        editor = sharedPreferences.edit()
+        timeTracking = TrackTime(this)
 
+        user = User.create()
+
+        if(timeTracking.isTimeTrackingRunning()) {
+            start_btn.setImageResource(R.drawable.ic_stop_white_100dp)
+            startTimer()
+        }
+
+        assignListeners()
+
+        loadUserData()
+    }
+
+    private fun assignListeners() {
         burger.setOnClickListener{
             //Creating the instance of PopupMenu
             val popup = PopupMenu(this@MainActivity, burger)
@@ -58,10 +65,8 @@ class MainActivity : AppCompatActivity() {
                 //Logout
                 if(item.itemId == R.id.logout_btn) {
                     mAuth?.signOut()
-                    editor.putBoolean(KEY_RUNNING, false)
-                    editor.putLong(KEY_START, 0)
-                    editor.apply()
-                    
+                    timeTracking.stopTrackingTime()
+
                     startActivity(
                         Intent(this@MainActivity,
                             LoginActivity::class.java)
@@ -90,44 +95,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         start_btn.setOnClickListener{
-            if(sharedPreferences.getBoolean(KEY_RUNNING, false)) {
+            if(timeTracking.isTimeTrackingRunning()) {
                 start_btn.setImageResource(R.drawable.ic_play_arrow_white_100dp)
-                editor.putBoolean(KEY_RUNNING, false)
+                timeTracking.stopTrackingTime()
             } else {
                 start_btn.setImageResource(R.drawable.ic_stop_white_100dp)
                 startTimer()
-                editor.putLong(KEY_START, System.currentTimeMillis())
-                editor.putBoolean(KEY_RUNNING, true)
+                timeTracking.startTrackingTime()
 
             }
-            editor.apply()
         }
     }
 
-    private fun initCount() {
-        if(sharedPreferences.getBoolean(KEY_RUNNING, false)) {
-            start_btn.setImageResource(R.drawable.ic_stop_white_100dp)
-            startTimer()
-        }
-    }
+    private fun loadUserData() {
+        val mUser = mAuth!!.currentUser
+        val mUserReference = mDatabaseReference!!.child(mUser!!.uid)
 
+        mUserReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
 
-    private fun hmsTimeFormatter(milliSeconds: Long): String {
-
-        return String.format(
-            "%02d:%02d:%02d",
-            TimeUnit.MILLISECONDS.toHours(milliSeconds),
-            TimeUnit.MILLISECONDS.toMinutes(milliSeconds) - TimeUnit.HOURS.toMinutes(
-                TimeUnit.MILLISECONDS.toHours(
-                    milliSeconds
-                )
-            ),
-            TimeUnit.MILLISECONDS.toSeconds(milliSeconds) - TimeUnit.MINUTES.toSeconds(
-                TimeUnit.MILLISECONDS.toMinutes(
-                    milliSeconds
-                )
-            )
-        )
+                user.salary = snapshot.child("salary").value as String
+                user.currency = snapshot.child("currency").value as String
+                user.firstName = snapshot.child("firstName").value as String
+                user.lastName = snapshot.child("lastName").value as String
+                //user.time = ...
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
     }
 
     private fun startTimer() {
@@ -137,7 +131,12 @@ class MainActivity : AppCompatActivity() {
         handler.postDelayed(object : Runnable {
             override fun run() {
 
-                updateTimer()
+                //Update timer
+                if (timeTracking.isTimeTrackingRunning()) {
+                    time.text = timeTracking.getCurrentTime()
+                }
+
+                //Update salary
                 updateSalary()
 
                 handler.postDelayed(this, delay.toLong())
@@ -145,24 +144,15 @@ class MainActivity : AppCompatActivity() {
         }, delay.toLong())
     }
 
-    private fun updateTimer() {
-        if (sharedPreferences.getBoolean(KEY_RUNNING, false)) {
-            val timeElapsed = System.currentTimeMillis() - sharedPreferences.getLong(KEY_START, System.currentTimeMillis())
-            val timeString = hmsTimeFormatter(timeElapsed)
-
-            time.text = timeString
-        }
-    }
-
     private fun updateSalary() {
-        if (sharedPreferences.getBoolean(KEY_RUNNING, false)) {
+        if (timeTracking.isTimeTrackingRunning()) {
             val mUser = mAuth!!.currentUser
             val mUserReference = mDatabaseReference!!.child(mUser!!.uid)
 
             mUserReference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
 
-                    val timeElapsed = System.currentTimeMillis() - sharedPreferences.getLong(KEY_START, System.currentTimeMillis())
+                    val timeElapsed = System.currentTimeMillis() - timeTracking.getStartTime()
                     var salary = snapshot.child("salary").value as String
                     val salaryPerMillisecond = (salary.replace(",", ".").toDouble() / (60*60*1000))
                     val currency = snapshot.child("currency").value as String
