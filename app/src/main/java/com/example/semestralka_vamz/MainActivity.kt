@@ -4,21 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.PopupMenu
-import com.example.semestralka_vamz.models.User
+import com.example.semestralka_vamz.models.TimeData
+import com.example.semestralka_vamz.models.TimeTracked
 import com.example.semestralka_vamz.tasks.TrackTime
 
 
 class MainActivity : AppCompatActivity() {
     //Time tracking
     private lateinit var timeTracking: TrackTime
-
-    //User
-    private lateinit var user: User
 
     //Firebase references
     private var mDatabaseReference: DatabaseReference? = null
@@ -30,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initialise()
-
     }
 
     private fun initialise() {
@@ -40,16 +36,12 @@ class MainActivity : AppCompatActivity() {
 
         timeTracking = TrackTime(this)
 
-        user = User.create()
-
         if(timeTracking.isTimeTrackingRunning()) {
-            start_btn.setImageResource(R.drawable.ic_stop_white_100dp)
+            start_btn.setImageResource(R.drawable.ic_pause_white_100dp)
             startTimer()
         }
 
         assignListeners()
-
-        loadUserData()
     }
 
     private fun assignListeners() {
@@ -65,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 //Logout
                 if(item.itemId == R.id.logout_btn) {
                     mAuth?.signOut()
-                    timeTracking.stopTrackingTime()
+                    stopTimer()
 
                     startActivity(
                         Intent(this@MainActivity,
@@ -94,34 +86,39 @@ class MainActivity : AppCompatActivity() {
             popup.show() //showing popup menu
         }
 
+
         start_btn.setOnClickListener{
             if(timeTracking.isTimeTrackingRunning()) {
                 start_btn.setImageResource(R.drawable.ic_play_arrow_white_100dp)
-                timeTracking.stopTrackingTime()
+                timeTracking.pauseTrackingTime()
             } else {
-                start_btn.setImageResource(R.drawable.ic_stop_white_100dp)
+                start_btn.setImageResource(R.drawable.ic_pause_white_100dp)
                 startTimer()
                 timeTracking.startTrackingTime()
 
             }
         }
+
+        stop_btn.setOnClickListener {
+            stopTimer()
+        }
     }
 
-    private fun loadUserData() {
+    private fun stopTimer() {
+        start_btn.setImageResource(R.drawable.ic_play_arrow_white_100dp)
+        time.text = "00:00:00"
+        val defaultSalary = "0.0" + salaryText.text.toString().takeLast(1)
+        val salaryEarned = salaryText.text.toString().dropLast(1).toDouble()
+
+        val stopData: TimeData? = timeTracking.stopTrackingTime(true)
+
+        val mDatabase = FirebaseDatabase.getInstance()
         val mUser = mAuth!!.currentUser
-        val mUserReference = mDatabaseReference!!.child(mUser!!.uid)
+        mDatabase.reference.child("Users").child(mUser!!.uid).child("time")
+            .child(System.currentTimeMillis().toString())
+            .setValue(TimeTracked(stopData!!.elapsed, salaryEarned, stopData!!.start, timeTracking.getStopTime()))
 
-        mUserReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                user.salary = snapshot.child("salary").value as String
-                user.currency = snapshot.child("currency").value as String
-                user.firstName = snapshot.child("firstName").value as String
-                user.lastName = snapshot.child("lastName").value as String
-                //user.time = ...
-            }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+        salaryText.text = defaultSalary
     }
 
     private fun startTimer() {
@@ -134,12 +131,11 @@ class MainActivity : AppCompatActivity() {
                 //Update timer
                 if (timeTracking.isTimeTrackingRunning()) {
                     time.text = timeTracking.getCurrentTime()
+
+                    updateSalary()
+
+                    handler.postDelayed(this, delay.toLong())
                 }
-
-                //Update salary
-                updateSalary()
-
-                handler.postDelayed(this, delay.toLong())
             }
         }, delay.toLong())
     }
@@ -159,10 +155,13 @@ class MainActivity : AppCompatActivity() {
 
                     val finalString = (Math.round((salaryPerMillisecond * timeElapsed) * 100.0) / 100.0).toString()+currency
 
-                    salaryText.text = finalString
+                    if(timeTracking.isTimeTrackingRunning()) {
+                        salaryText.text = finalString
+                    }
                 }
                 override fun onCancelled(databaseError: DatabaseError) {}
             })
         }
     }
 }
+

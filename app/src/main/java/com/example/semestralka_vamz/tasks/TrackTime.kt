@@ -3,21 +3,28 @@ package com.example.semestralka_vamz.tasks
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
+import com.example.semestralka_vamz.models.TimeData
 import java.util.concurrent.TimeUnit
 
 class TrackTime(activity: AppCompatActivity) {
 
     private val PREF_NAME = "data"
     private val KEY_START = "start"
+    private val KEY_STOP = "stop"
+    private val KEY_PAUSE_TIME = "pause_time"
     private val KEY_RUNNING = "running"
+    private val KEY_PAUSE = "pause"
 
     private var sharedPreferences: SharedPreferences
     private var editor: SharedPreferences.Editor
+
+    private var pausedTime: Long
 
     init {
         sharedPreferences = activity.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
         editor.apply()
+        pausedTime = 0
     }
 
     fun isTimeTrackingRunning(): Boolean {
@@ -36,17 +43,53 @@ class TrackTime(activity: AppCompatActivity) {
     }
 
     fun getTimeElapsed(): Long {
-        return System.currentTimeMillis() - getStartTime()
+        return (System.currentTimeMillis() - getStartTime()) - getTimePaused()
     }
 
-    fun stopTrackingTime() {
+    fun getTimePaused (): Long {
+        return pausedTime
+    }
+
+    fun getStopTime(): Long {
+        return sharedPreferences.getLong(KEY_STOP, System.currentTimeMillis())
+    }
+
+    fun stopTrackingTime(result:Boolean = false): TimeData? {
+
+        val elapsed: Long = getTimeElapsed()
+        val start: Long = getStartTime()
+
         editor.putBoolean(KEY_RUNNING, false)
+        editor.putBoolean(KEY_PAUSE, false)
+        editor.putLong(KEY_START, 0)
+        editor.putLong(KEY_PAUSE_TIME, 0)
+        editor.putLong(KEY_STOP, System.currentTimeMillis())
         editor.apply()
+
+        pausedTime = 0
+
+        if(result) {
+            return TimeData(elapsed, start)
+        }
+        return null
     }
 
     fun startTrackingTime() {
-        editor.putLong(KEY_START, System.currentTimeMillis())
+        if(!sharedPreferences.getBoolean(KEY_PAUSE, false)) {
+            editor.putLong(KEY_START, System.currentTimeMillis())
+        } else {
+            pausedTime += System.currentTimeMillis() - sharedPreferences.getLong(KEY_PAUSE_TIME, System.currentTimeMillis())
+        }
         editor.putBoolean(KEY_RUNNING, true)
+        editor.putBoolean(KEY_PAUSE, false)
+        editor.putLong(KEY_STOP, 0)
+        editor.apply()
+    }
+
+    fun pauseTrackingTime() {
+        editor.putLong(KEY_PAUSE_TIME, System.currentTimeMillis())
+        editor.putBoolean(KEY_PAUSE, true)
+        editor.putBoolean(KEY_RUNNING, false)
         editor.apply()
     }
 

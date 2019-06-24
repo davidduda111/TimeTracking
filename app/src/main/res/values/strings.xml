@@ -21,4 +21,6 @@
     <string name="timeDesc">Time</string>
     <string name="defaultSalary">0€</string>
     <string name="salaryDesc">Salary</string>
+
+    <string name="save">Save</string>
 </resources>

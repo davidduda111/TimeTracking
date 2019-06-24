@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.semestralka_vamz
 
 import android.app.ProgressDialog
@@ -13,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 
+@Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
     private val TAG = "LoginActivity"

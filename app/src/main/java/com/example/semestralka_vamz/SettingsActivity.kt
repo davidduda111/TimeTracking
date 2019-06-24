@@ -2,10 +2,14 @@ package com.example.semestralka_vamz
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.text.SpannableStringBuilder
+import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlin.NullPointerException as NullPointerException1
 
@@ -21,7 +25,45 @@ class SettingsActivity : AppCompatActivity() {
 
         initialise()
 
+        setClickListeners()
 
+
+    }
+
+    private fun setClickListeners() {
+        btn_save.setOnClickListener {
+            var count = 0
+            val mDatabase = FirebaseDatabase.getInstance()
+            val mUser = mAuth!!.currentUser
+            val database = mDatabase.reference.child("Users")
+                .child(mUser!!.uid)
+
+            database.child("currency").setValue(currency.text.toString())
+                .addOnFailureListener {
+                    count++
+                }
+
+            database.child("salary").setValue(salary.text.toString())
+                .addOnFailureListener {
+                    count++
+                }
+
+            database.child("firstName").setValue(firstName.text.toString())
+                .addOnFailureListener {
+                    count++
+                }
+
+            database.child("lastName").setValue(lastName.text.toString())
+                .addOnFailureListener {
+                    count++
+                }
+
+            if(count == 4) {
+                Snackbar.make(settingsRoot, "Data saving failed.", Snackbar.LENGTH_SHORT).show()
+            } else {
+                Snackbar.make(settingsRoot, "Data saved successfully.", Snackbar.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onStart() {
