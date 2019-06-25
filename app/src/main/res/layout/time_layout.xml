@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeLayout"
+        android:background="@drawable/transparent_btn"
+        android:layout_margin="20dp"
+>
+
+
+    <TextView
+            android:text="24.06.2019"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+    />
+
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:layout_alignParentTop="true"
+    >
+
+        <TextView
+                android:text="Start:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/startLabel"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                />
+
+        <TextView
+                android:text="11:03:24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/startTime"
+                android:textSize="25sp"
+                android:textColor="@color/colorWhite"
+                android:layout_toEndOf="@+id/startLabel"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+        />
+
+        <TextView
+            android:text="Stop:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stopLabel"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_below="@+id/startLabel"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+        />
+
+        <TextView
+                android:text="11:05:45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/stopTime"
+                android:textSize="25sp"
+                android:textColor="@color/colorWhite"
+                android:layout_toEndOf="@+id/stopLabel"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="63dp"
+
+        />
+
+        <TextView
+                android:text="Pause:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pauseLabel"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:layout_below="@+id/stopLabel"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="20dp"
+        />
+
+        <TextView
+                android:text="11:05:45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pauseTime"
+                android:textSize="25sp"
+                android:textColor="@color/colorWhite"
+                android:layout_toEndOf="@+id/pauseLabel"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="107dp"
+
+        />
+
+        <TextView
+                android:text="Duration:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/durationLabel"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:layout_below="@+id/pauseLabel"
+                android:layout_marginTop="-4dp"
+                android:layout_marginBottom="20dp"
+        />
+
+        <TextView
+                android:text="11:05:45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/durationTime"
+                android:textSize="25sp"
+                android:textColor="@color/colorWhite"
+                android:layout_toEndOf="@+id/durationLabel"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="151dp"
+
+        />
+
+        <TextView
+                android:text="25.6€"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/salary"
+                android:textSize="40sp"
+                android:textColor="@color/colorWhite"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="40dp"
+                android:layout_centerVertical="true"
+
+
+        />
+    </RelativeLayout>
+</RelativeLayout>

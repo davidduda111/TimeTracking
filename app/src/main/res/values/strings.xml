@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Time tracking</string>
+    <string name="app_name">Time Tracking</string>
 
     <string name="email">Email</string>
     <string name="password">Password</string>

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import com.example.semestralka_vamz.models.TimeData
 import java.util.concurrent.TimeUnit
 
-class TrackTime(activity: AppCompatActivity) {
+class TimeTrackingService(activity: AppCompatActivity) {
 
     private val PREF_NAME = "data"
     private val KEY_START = "start"
@@ -31,8 +31,12 @@ class TrackTime(activity: AppCompatActivity) {
         return sharedPreferences.getBoolean(KEY_RUNNING, false)
     }
 
+    fun isTimeTrackingPaused(): Boolean {
+        return sharedPreferences.getBoolean(KEY_PAUSE, false)
+    }
+
     fun getCurrentTime(): String? {
-        if(isTimeTrackingRunning()) {
+        if(isTimeTrackingRunning() || isTimeTrackingPaused()) {
             return hmsTimeFormatter(getTimeElapsed())
         }
         return null
@@ -47,6 +51,9 @@ class TrackTime(activity: AppCompatActivity) {
     }
 
     fun getTimePaused (): Long {
+        if(sharedPreferences.getBoolean(KEY_PAUSE, false)) {
+            return System.currentTimeMillis() - sharedPreferences.getLong(KEY_PAUSE_TIME, System.currentTimeMillis())
+        }
         return pausedTime
     }
 
@@ -55,9 +62,13 @@ class TrackTime(activity: AppCompatActivity) {
     }
 
     fun stopTrackingTime(result:Boolean = false): TimeData? {
+        if(sharedPreferences.getBoolean(KEY_PAUSE, false)) {
+            pausedTime += System.currentTimeMillis() - sharedPreferences.getLong(KEY_PAUSE_TIME, System.currentTimeMillis())
+        }
 
         val elapsed: Long = getTimeElapsed()
-        val start: Long = getStartTime()
+        val start: Long = getStartTime() - 40000
+        val paused: Long = pausedTime
 
         editor.putBoolean(KEY_RUNNING, false)
         editor.putBoolean(KEY_PAUSE, false)
@@ -69,7 +80,7 @@ class TrackTime(activity: AppCompatActivity) {
         pausedTime = 0
 
         if(result) {
-            return TimeData(elapsed, start)
+            return TimeData(elapsed, start, paused)
         }
         return null
     }
