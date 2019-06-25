@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.semestralka_vamz.R
-import com.example.semestralka_vamz.models.TimeTracked
-import com.example.semestralka_vamz.models.Times
+import com.example.semestralka_vamz.data.TimeTracked
+import com.example.semestralka_vamz.data.Times
 import kotlinx.android.synthetic.main.time_layout.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit

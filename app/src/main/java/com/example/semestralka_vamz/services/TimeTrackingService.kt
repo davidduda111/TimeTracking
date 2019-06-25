@@ -1,9 +1,9 @@
-package com.example.semestralka_vamz.tasks
+package com.example.semestralka_vamz.services
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
-import com.example.semestralka_vamz.models.TimeData
+import com.example.semestralka_vamz.data.TimeData
 import java.util.concurrent.TimeUnit
 
 class TimeTrackingService(activity: AppCompatActivity) {

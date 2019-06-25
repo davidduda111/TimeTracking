@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import com.example.semestralka_vamz.adapters.TimeAdapter
-import com.example.semestralka_vamz.models.TimeTracked
+import com.example.semestralka_vamz.data.TimeTracked
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_statistics.*
@@ -25,7 +23,6 @@ class StatisticsActivity : AppCompatActivity() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-    private lateinit var gridLayoutManager: GridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +77,5 @@ class StatisticsActivity : AppCompatActivity() {
 
         linearLayoutManager = LinearLayoutManager(this)
         statisticsRecycler.layoutManager = linearLayoutManager
-
-        gridLayoutManager = GridLayoutManager(this, 2)
     }
 }

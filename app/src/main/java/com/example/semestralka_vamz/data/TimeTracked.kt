@@ -1,4 +1,4 @@
-package com.example.semestralka_vamz.models
+package com.example.semestralka_vamz.data
 
 data class TimeTracked(
     val duration    : Long = 0,

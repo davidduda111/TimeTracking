@@ -9,9 +9,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.PopupMenu
-import com.example.semestralka_vamz.models.TimeData
-import com.example.semestralka_vamz.models.TimeTracked
-import com.example.semestralka_vamz.tasks.TimeTrackingService
+import com.example.semestralka_vamz.data.TimeData
+import com.example.semestralka_vamz.data.TimeTracked
+import com.example.semestralka_vamz.services.TimeTrackingService
 
 
 class MainActivity : AppCompatActivity() {
@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity() {
             popup.setOnMenuItemClickListener { item ->
                 //Logout
                 if(item.itemId == R.id.logout_btn) {
-                    mAuth?.signOut()
                     stopTimer()
+                    mAuth?.signOut()
 
                     startActivity(
                         Intent(this@MainActivity,
@@ -113,20 +113,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopTimer() {
-        start_btn.setImageResource(R.drawable.ic_play_arrow_white_100dp)
-        time.text = "00:00:00"
-        val defaultSalary = "0.0" + salaryText.text.toString().takeLast(1)
-        val salaryEarned = salaryText.text.toString()
+        if(timeTrackingService.isTimeTrackingPaused() || timeTrackingService.isTimeTrackingRunning()) {
+            start_btn.setImageResource(R.drawable.ic_play_arrow_white_100dp)
+            time.text = "00:00:00"
+            val defaultSalary = "0.0" + salaryText.text.toString().takeLast(1)
+            val salaryEarned = salaryText.text.toString()
 
-        val stopData: TimeData? = timeTrackingService.stopTrackingTime(true)
+            val stopData: TimeData? = timeTrackingService.stopTrackingTime(true)
 
-        val mDatabase = FirebaseDatabase.getInstance()
-        val mUser = mAuth!!.currentUser
-        mDatabase.reference.child("Users").child(mUser!!.uid).child("time")
-            .child(System.currentTimeMillis().toString())
-            .setValue(TimeTracked(stopData!!.elapsed, salaryEarned, stopData.start, stopData.paused, timeTrackingService.getStopTime() - 40000))
+            val mDatabase = FirebaseDatabase.getInstance()
+            val mUser = mAuth!!.currentUser
+            mDatabase.reference.child("Users").child(mUser!!.uid).child("time")
+                .child(System.currentTimeMillis().toString())
+                .setValue(
+                    TimeTracked(
+                        stopData!!.elapsed,
+                        salaryEarned,
+                        stopData.start,
+                        stopData.paused,
+                        timeTrackingService.getStopTime() - 40000
+                    )
+                )
 
-        salaryText.text = defaultSalary
+            salaryText.text = defaultSalary
+        }
     }
 
     private fun startTimer() {
